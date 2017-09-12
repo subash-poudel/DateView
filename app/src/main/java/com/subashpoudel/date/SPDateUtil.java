@@ -6,11 +6,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-public class DateUtil {
+public class SPDateUtil {
 
     public static final String YYYY_MM_DD = "yyyy-MM-dd";
 
-    private DateUtil() {
+    private SPDateUtil() {
     }
 
     /*

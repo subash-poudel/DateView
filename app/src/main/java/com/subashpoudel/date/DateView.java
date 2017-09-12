@@ -24,6 +24,7 @@ import android.widget.TextView;
 import com.subashpoudel.R;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 public class DateView extends LinearLayout implements TextView.OnEditorActionListener {
@@ -39,19 +40,21 @@ public class DateView extends LinearLayout implements TextView.OnEditorActionLis
     private EditText editTextYear;
     private EditText editTextMonth;
     private EditText editTextDay;
+    private boolean enableErrorFeedback = false;
+    private ArrayList<TextView> nextEditTextArray;
 
-    private ArrayList<EditText> nextEditTextArray;
+    private boolean yearSet = false;
+    private boolean monthSet = false;
+    private boolean daySet = false;
 
     @ColorInt
-    private int selectedColor;
+    private int selectedColor = Color.BLACK;
     @ColorInt
-    private int errorColor;
-    private String typeFace;
+    private int errorColor = Color.RED;
     private int dateFormat = DATE_FORMAT_YMD;
     private Date minDate;
     private Date maxDate;
     private DateEnteredListener dateEnteredListener;
-
 
     public DateView(Context context) {
         this(context, null);
@@ -72,40 +75,12 @@ public class DateView extends LinearLayout implements TextView.OnEditorActionLis
         init(attrs);
     }
 
-    public void setDateEnteredListener(DateEnteredListener dateEnteredListener) {
-        this.dateEnteredListener = dateEnteredListener;
-    }
+    // View setup
 
     public void init(AttributeSet attributeSet) {
         nextEditTextArray = new ArrayList<>(3);
         extractXMLAttributes(attributeSet);
         setupView();
-    }
-
-    public void setDate(@NonNull Date date) {
-        date.
-    }
-
-    public void setDate(CharSequence year, CharSequence month, CharSequence day) {
-        String dateStr = year
-                + DATE_SEPARATOR
-                + month
-                + DATE_SEPARATOR
-                + day;
-        Date date = validateAndReturnDate(dateStr);
-        if (date != null) {
-            editTextYear.setText(year);
-            editTextMonth.setText(month);
-            editTextDay.setText(day);
-        } else {
-            logError("Invalid date provided " + dateStr);
-        }
-    }
-
-    public void clearDate() {
-        editTextYear.setText("");
-        editTextMonth.setText("");
-        editTextDay.setText("");
     }
 
     private void extractXMLAttributes(AttributeSet attrs) {
@@ -116,7 +91,8 @@ public class DateView extends LinearLayout implements TextView.OnEditorActionLis
 
         try {
             selectedColor = a.getColor(R.styleable.DateView_sp_normal_color, Color.BLACK);
-            errorColor = a.getColor(R.styleable.DateView_sp_normal_color, Color.RED);
+            errorColor = a.getColor(R.styleable.DateView_sp_error_color, Color.RED);
+            enableErrorFeedback = a.getBoolean(R.styleable.DateView_sp_enable_error_feedback, false);
             dateFormat = a.getInt(R.styleable.DateView_sp_date_format, 0);
             String minDateStr = a.getString(R.styleable.DateView_sp_minDate);
             String maxDateStr = a.getString(R.styleable.DateView_sp_maxDate);
@@ -128,72 +104,16 @@ public class DateView extends LinearLayout implements TextView.OnEditorActionLis
         }
     }
 
-    private Date validateAndReturnDate(String dateStr) {
-        try {
-            DateComponent dateComponent = new DateComponent(dateStr, DATE_SEPARATOR);
-            if (DateUtil.validateUserData(dateComponent)) {
-                return DateUtil.getDate(dateStr, DateUtil.YYYY_MM_DD);
-            }
-
-        } catch (InvalidDateException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    private void validateMinAndMaxDates() {
-        if (minDate != null && maxDate != null) {
-            if (maxDate.before(minDate)) {
-                logError("Error: Max date is set before min date. Setting both dates to null");
-                maxDate = null;
-                minDate = null;
-            }
-        }
-    }
-
-    public Date getMinDate() {
-        return minDate;
-    }
-
-    public void setMinDate(Date minDate) {
-        this.minDate = minDate;
-        validateMinAndMaxDates();
-    }
-
-    public Date getMaxDate() {
-        return maxDate;
-    }
-
-    public void setMaxDate(Date maxDate) {
-        this.maxDate = maxDate;
-        validateMinAndMaxDates();
-    }
-
-    private void logError(String errorMessage) {
-        if (errorMessage == null) {
-            return;
-        }
-        Log.e(this.getClass().getName(), errorMessage);
-    }
-
-    private void hideSeparetorFromLastView() {
-        int childCount = getChildCount();
-        if (childCount > 0) {
-            View parent = getChildAt(childCount - 1);
-            parent.findViewById(R.id.tv_separator).setVisibility(GONE);
-        }
-    }
-
     private void setupView() {
         setOrientation(HORIZONTAL);
-        setupDateFormat(dateFormat);
+        setDateFormat(dateFormat);
     }
 
     public int getDateFormat() {
         return dateFormat;
     }
 
-    public void setupDateFormat(int dateFormat) {
+    public void setDateFormat(int dateFormat) {
         nextEditTextArray.clear();
         switch (dateFormat) {
             case DATE_FORMAT_YMD:
@@ -232,7 +152,7 @@ public class DateView extends LinearLayout implements TextView.OnEditorActionLis
                 setupMonthView();
                 break;
         }
-        hideSeparetorFromLastView();
+        hideSeparatorFromLastView();
         setupEditTextAutoSwitch();
     }
 
@@ -241,6 +161,7 @@ public class DateView extends LinearLayout implements TextView.OnEditorActionLis
         editTextYear = (EditText) yearView.findViewById(R.id.et_year);
         editTextYear.setTextColor(selectedColor);
         editTextYear.setOnEditorActionListener(this);
+        editTextYear.setTextColor(selectedColor);
         nextEditTextArray.add(editTextYear);
     }
 
@@ -249,6 +170,7 @@ public class DateView extends LinearLayout implements TextView.OnEditorActionLis
         editTextDay = (EditText) dayView.findViewById(R.id.et_day);
         editTextDay.setTextColor(selectedColor);
         editTextDay.setOnEditorActionListener(this);
+        editTextDay.setTextColor(selectedColor);
         nextEditTextArray.add(editTextDay);
     }
 
@@ -257,7 +179,33 @@ public class DateView extends LinearLayout implements TextView.OnEditorActionLis
         editTextMonth = (EditText) monthView.findViewById(R.id.et_month);
         editTextMonth.setTextColor(selectedColor);
         editTextMonth.setOnEditorActionListener(this);
+        editTextMonth.setTextColor(selectedColor);
         nextEditTextArray.add(editTextMonth);
+    }
+
+    private void hideSeparatorFromLastView() {
+        int childCount = getChildCount();
+        if (childCount > 0) {
+            View parent = getChildAt(childCount - 1);
+            parent.findViewById(R.id.tv_separator).setVisibility(GONE);
+        }
+    }
+
+
+    @Override
+    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+        if (actionId == EditorInfo.IME_ACTION_NEXT) {
+            int currentEditTextIndex = nextEditTextArray.indexOf(v);
+            if (currentEditTextIndex < 0) {
+                return false;
+            }
+            currentEditTextIndex++;
+            if (currentEditTextIndex >= 1 && currentEditTextIndex <= 2) {
+                nextEditTextArray.get(currentEditTextIndex).requestFocus();
+                return true;
+            }
+        }
+        return false;
     }
 
     private void setupEditTextAutoSwitch() {
@@ -274,7 +222,8 @@ public class DateView extends LinearLayout implements TextView.OnEditorActionLis
 
             @Override
             public void afterTextChanged(Editable s) {
-                notifyListeners();
+                yearSet = true;
+                onDateEntered();
                 if (s != null && s.length() == 4) {
                     moveToNextEditText(editTextYear);
                 }
@@ -294,7 +243,8 @@ public class DateView extends LinearLayout implements TextView.OnEditorActionLis
 
             @Override
             public void afterTextChanged(Editable s) {
-                notifyListeners();
+                daySet = true;
+                onDateEntered();
                 if (s != null && s.length() == 2) {
                     moveToNextEditText(editTextDay);
                 }
@@ -314,14 +264,27 @@ public class DateView extends LinearLayout implements TextView.OnEditorActionLis
 
             @Override
             public void afterTextChanged(Editable s) {
-                notifyListeners();
+                monthSet = true;
+                onDateEntered();
                 if (s != null && s.length() == 2) {
                     moveToNextEditText(editTextMonth);
                 }
             }
         });
 
+    }
 
+    private void onDateEntered() {
+        Date date = getDate();
+        boolean isDateValid = isDateValid(date) && date != null;
+        notifyListeners(date, isDateValid);
+        showErrorColor(!isDateValid);
+    }
+
+    private void notifyListeners(Date date, boolean isValid) {
+        if (dateEnteredListener != null) {
+            dateEnteredListener.onDateEntered(date, isValid);
+        }
     }
 
     private void moveToNextEditText(EditText currentEditText) {
@@ -330,18 +293,33 @@ public class DateView extends LinearLayout implements TextView.OnEditorActionLis
             return;
         }
         currentEditTextIndex++;
-        if (currentEditTextIndex >= 1 && currentEditTextIndex < nextEditTextArray.size()) {
+        if (currentEditTextIndex >= 1 && currentEditTextIndex <= 2) {
             nextEditTextArray.get(currentEditTextIndex).requestFocus();
         }
     }
 
-    private boolean isAllTextFieldsDataSet() {
-        return !TextUtils.isEmpty(editTextYear.getText())
-                && !TextUtils.isEmpty(editTextMonth.getText())
-                && !TextUtils.isEmpty(editTextDay.getText());
+    private void showErrorColor(boolean show) {
+        if (enableErrorFeedback
+                && yearSet
+                && monthSet
+                && daySet) {
+            int color = show ? errorColor : selectedColor;
+            editTextYear.setTextColor(color);
+            editTextMonth.setTextColor(color);
+            editTextDay.setTextColor(color);
+        }
     }
 
-    public Date getCurrentDate() {
+    public void setDate(@NonNull Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        editTextYear.setText(calendar.get(Calendar.YEAR));
+        editTextMonth.setText(calendar.get(Calendar.MONTH));
+        editTextDay.setText(calendar.get(Calendar.DAY_OF_MONTH));
+    }
+
+    public @Nullable
+    Date getDate() {
         if (!isAllTextFieldsDataSet()) {
             return null;
         }
@@ -356,6 +334,24 @@ public class DateView extends LinearLayout implements TextView.OnEditorActionLis
             e.printStackTrace();
         }
         return null;
+    }
+
+    // Validation codes
+
+    private boolean isAllTextFieldsDataSet() {
+        return !TextUtils.isEmpty(editTextYear.getText())
+                && !TextUtils.isEmpty(editTextMonth.getText())
+                && !TextUtils.isEmpty(editTextDay.getText());
+    }
+
+    private void validateMinAndMaxDates() {
+        if (minDate != null && maxDate != null) {
+            if (maxDate.before(minDate)) {
+                logError("Error: Max date is set before min date. Setting both dates to null");
+                maxDate = null;
+                minDate = null;
+            }
+        }
     }
 
     private boolean isDateValid(Date date) {
@@ -375,30 +371,56 @@ public class DateView extends LinearLayout implements TextView.OnEditorActionLis
         return true;
     }
 
-    private void notifyListeners() {
-        if (dateEnteredListener != null) {
-            Date date = getCurrentDate();
-            boolean isDateValid = isDateValid(date);
-            dateEnteredListener.onDateEntered(date, isDateValid);
+    private Date validateAndReturnDate(String dateStr) {
+        try {
+            DateComponent dateComponent = new DateComponent(dateStr, DATE_SEPARATOR);
+            if (SPDateUtil.validateUserData(dateComponent)) {
+                return SPDateUtil.getDate(dateStr, SPDateUtil.YYYY_MM_DD);
+            }
+
+        } catch (InvalidDateException e) {
+            e.printStackTrace();
         }
+        return null;
     }
 
-    @Override
-    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-        if (actionId == EditorInfo.IME_ACTION_NEXT) {
-            int currentEditTextIndex = nextEditTextArray.indexOf(v);
-            if (currentEditTextIndex < 0) {
-                return false;
-            }
-            currentEditTextIndex++;
-            if (currentEditTextIndex >= 1 && currentEditTextIndex <= 2) {
-                nextEditTextArray.get(currentEditTextIndex).requestFocus();
-                return true;
-            }
-        }
-        return false;
+    // Additional functions
+
+    public void clearDateFields() {
+        editTextYear.setText("");
+        editTextMonth.setText("");
+        editTextDay.setText("");
     }
 
+    public Date getMinDate() {
+        return minDate;
+    }
+
+    public void setMinDate(Date minDate) {
+        this.minDate = minDate;
+        validateMinAndMaxDates();
+    }
+
+    public Date getMaxDate() {
+        return maxDate;
+    }
+
+    public void setMaxDate(Date maxDate) {
+        this.maxDate = maxDate;
+        validateMinAndMaxDates();
+    }
+
+    public void setDateEnteredListener(DateEnteredListener dateEnteredListener) {
+        this.dateEnteredListener = dateEnteredListener;
+    }
+
+    // Logging
+
+    private void logError(@NonNull String message) {
+        Log.e(this.getClass().getName(), message);
+    }
+
+    // Interface to notify view on date changes
     public interface DateEnteredListener {
         void onDateEntered(Date date, boolean isValid);
     }

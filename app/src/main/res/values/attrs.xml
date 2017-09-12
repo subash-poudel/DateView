@@ -11,9 +11,8 @@
         </attr>
         <attr name="sp_error_color" format="color" />
         <attr name="sp_normal_color" format="color" />
-        <attr name="sp_error_as_you_type" format="boolean" />
+        <attr name="sp_enable_error_feedback" format="boolean" />
         <attr name="sp_minDate" format="string" />
         <attr name="sp_maxDate" format="string" />
-        <attr name="sp_default_date" format="string"/>
     </declare-styleable>
 </resources>
