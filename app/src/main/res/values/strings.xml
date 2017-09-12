@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">DatePicker</string>
+    <string name="sp_year">Year</string>
+    <string name="sp_month">Month</string>
+    <string name="sp_day">Day</string>
+    <string name="sp_separator">/</string>
+
+</resources>

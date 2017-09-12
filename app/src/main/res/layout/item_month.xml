@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/tv_month"
+        style="@style/AppEditTextLabel"
+        android:layout_alignParentTop="true"
+        android:text="@string/sp_month" />
+
+    <EditText
+        android:id="@+id/et_month"
+        style="@style/MonthEditText"
+        android:layout_below="@+id/tv_month"
+        android:maxLength="2" />
+
+    <TextView
+        android:id="@+id/tv_separator"
+        style="@style/SeparatorTextView"
+        android:layout_alignBaseline="@+id/et_month"
+        android:layout_toEndOf="@+id/et_month"
+        android:layout_toRightOf="@+id/et_month" />
+
+</RelativeLayout>

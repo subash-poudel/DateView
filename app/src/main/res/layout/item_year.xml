@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/tv_year"
+        style="@style/AppEditTextLabel"
+        android:layout_alignParentTop="true"
+        android:text="@string/sp_year" />
+
+    <EditText
+        android:id="@+id/et_year"
+        style="@style/YearEditText"
+        android:layout_below="@+id/tv_year"
+        android:maxLength="4" />
+
+    <TextView
+        android:id="@+id/tv_separator"
+        style="@style/SeparatorTextView"
+        android:layout_alignBaseline="@+id/et_year"
+        android:layout_toEndOf="@+id/et_year"
+        android:layout_toRightOf="@+id/et_year" />
+
+</RelativeLayout>

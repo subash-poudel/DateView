@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/tv_day"
+        style="@style/AppEditTextLabel"
+        android:layout_alignParentTop="true"
+        android:text="@string/sp_day" />
+
+    <EditText
+        android:id="@+id/et_day"
+        style="@style/DayEditText"
+        android:layout_below="@+id/tv_day"
+        android:maxLength="2" />
+
+    <TextView
+        android:id="@+id/tv_separator"
+        style="@style/SeparatorTextView"
+        android:layout_alignBaseline="@+id/et_day"
+        android:layout_toEndOf="@+id/et_day"
+        android:layout_toRightOf="@+id/et_day" />
+
+</RelativeLayout>
