@@ -13,36 +13,6 @@ public class SPDateUtil {
     private SPDateUtil() {
     }
 
-    /*
-    * Copied from
-    * https://stackoverflow.com/questions/1021324/java-code-for-calculating-leap-year/1021373#1021373
-    * :)
-    * */
-    public static boolean isLeapYear(int year) {
-        Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.YEAR, year);
-        return cal.getActualMaximum(Calendar.DAY_OF_YEAR) > 365;
-    }
-
-    /*
-    * User can input 9999-99-99 and the date formatter will treat it as a valid date
-    * validateUserData prevent's above scenario
-    * */
-    public static boolean validateUserData(CharSequence year, CharSequence month, CharSequence day) {
-        if (year == null || month == null || day == null) {
-            return false;
-        }
-        try {
-            int numericYear = Integer.parseInt(year.toString());
-            int numericMonth = Integer.parseInt(month.toString());
-            int numericDay = Integer.parseInt(day.toString());
-            return validateUserData(numericYear, numericMonth, numericDay);
-        } catch (NumberFormatException e) {
-            e.printStackTrace();
-        }
-        return true;
-    }
-
     public static boolean validateUserData(int year, int month, int day) {
         if (!isYearValid(year)) {
             return false;
