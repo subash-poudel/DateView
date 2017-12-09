@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/DatePicker.iml" filepath="$PROJECT_DIR$/DatePicker.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dateview/dateview.iml" filepath="$PROJECT_DIR$/dateview/dateview.iml" />
     </modules>
   </component>
 </project>

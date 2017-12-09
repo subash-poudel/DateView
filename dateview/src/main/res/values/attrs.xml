@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="DateView">
+        <attr name="sp_date_format" format="enum">
+            <enum name="YMD" value="0" />
+            <enum name="YDM" value="1" />
+            <enum name="DMY" value="2" />
+            <enum name="DYM" value="3" />
+            <enum name="MDY" value="4" />
+            <enum name="MYD" value="5" />
+        </attr>
+        <attr name="sp_error_color" format="color" />
+        <attr name="sp_normal_color" format="color" />
+        <attr name="sp_enable_error_feedback" format="boolean" />
+        <attr name="sp_minDate" format="string" />
+        <attr name="sp_maxDate" format="string" />
+    </declare-styleable>
+</resources>

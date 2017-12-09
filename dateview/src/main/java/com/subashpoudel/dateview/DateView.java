@@ -1,4 +1,4 @@
-package com.subashpoudel.date;
+package com.subashpoudel.dateview;
 
 
 import android.annotation.TargetApi;
@@ -20,8 +20,6 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import com.subashpoudel.R;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -158,7 +156,7 @@ public class DateView extends LinearLayout implements TextView.OnEditorActionLis
 
     private void setupYearView() {
         View yearView = inflate(getContext(), R.layout.item_year, this);
-        editTextYear = (EditText) yearView.findViewById(R.id.et_year);
+        editTextYear = yearView.findViewById(R.id.et_year);
         editTextYear.setTextColor(selectedColor);
         editTextYear.setOnEditorActionListener(this);
         editTextYear.setTextColor(selectedColor);
@@ -167,7 +165,7 @@ public class DateView extends LinearLayout implements TextView.OnEditorActionLis
 
     private void setupDayView() {
         View dayView = inflate(getContext(), R.layout.item_day, this);
-        editTextDay = (EditText) dayView.findViewById(R.id.et_day);
+        editTextDay = dayView.findViewById(R.id.et_day);
         editTextDay.setTextColor(selectedColor);
         editTextDay.setOnEditorActionListener(this);
         editTextDay.setTextColor(selectedColor);
@@ -176,7 +174,7 @@ public class DateView extends LinearLayout implements TextView.OnEditorActionLis
 
     public void setupMonthView() {
         View monthView = inflate(getContext(), R.layout.item_month, this);
-        editTextMonth = (EditText) monthView.findViewById(R.id.et_month);
+        editTextMonth = monthView.findViewById(R.id.et_month);
         editTextMonth.setTextColor(selectedColor);
         editTextMonth.setOnEditorActionListener(this);
         editTextMonth.setTextColor(selectedColor);
@@ -276,7 +274,7 @@ public class DateView extends LinearLayout implements TextView.OnEditorActionLis
 
     private void onDateEntered() {
         Date date = getDate();
-        boolean isDateValid = isDateValid(date) && date != null;
+        boolean isDateValid = isDateValid(date);
         notifyListeners(date, isDateValid);
         showErrorColor(!isDateValid);
     }
@@ -374,8 +372,8 @@ public class DateView extends LinearLayout implements TextView.OnEditorActionLis
     private Date validateAndReturnDate(String dateStr) {
         try {
             DateComponent dateComponent = new DateComponent(dateStr, DATE_SEPARATOR);
-            if (SPDateUtil.validateUserData(dateComponent)) {
-                return SPDateUtil.getDate(dateStr, SPDateUtil.YYYY_MM_DD);
+            if (DateUtil.validateUserData(dateComponent)) {
+                return DateUtil.getDate(dateStr, DateUtil.YYYY_MM_DD);
             }
 
         } catch (InvalidDateException e) {
@@ -421,7 +419,7 @@ public class DateView extends LinearLayout implements TextView.OnEditorActionLis
     }
 
     // Interface to notify view on date changes
-    public interface DateEnteredListener {
+    interface DateEnteredListener {
         void onDateEntered(Date date, boolean isValid);
     }
 

@@ -1,4 +1,4 @@
-package com.subashpoudel.date;
+package com.subashpoudel.dateview;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -6,14 +6,14 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-public class SPDateUtil {
+class DateUtil {
 
-    public static final String YYYY_MM_DD = "yyyy-MM-dd";
+    static final String YYYY_MM_DD = "yyyy-MM-dd";
 
-    private SPDateUtil() {
+    private DateUtil() {
     }
 
-    public static boolean validateUserData(int year, int month, int day) {
+    private static boolean validateUserData(int year, int month, int day) {
         if (!isYearValid(year)) {
             return false;
         }
@@ -26,7 +26,7 @@ public class SPDateUtil {
         return true;
     }
 
-    public static boolean validateUserData(DateComponent dateComponent) {
+    static boolean validateUserData(DateComponent dateComponent) {
         return validateUserData(dateComponent.year, dateComponent.month, dateComponent.day);
     }
 
@@ -51,7 +51,7 @@ public class SPDateUtil {
         return day <= noOfDaysInMonth;
     }
 
-    public static Date getDate(String dateStr, String format) {
+    static Date getDate(String dateStr, String format) {
         try {
             SimpleDateFormat fmt = new SimpleDateFormat(format, Locale.getDefault());
             return fmt.parse(dateStr);

@@ -1,15 +1,15 @@
-package com.subashpoudel.date;
+package com.subashpoudel.dateview;
 
 import android.text.TextUtils;
 
 // A helper class to convert a string date like 2012/12/12 to corresponding date components
-public class DateComponent {
+class DateComponent {
     int year;
     int month;
     int day;
 
     // Assumes date to be of yyyy/mm/dd format
-    public DateComponent(String date, String separator) throws InvalidDateException {
+    DateComponent(String date, String separator) throws InvalidDateException {
         if (TextUtils.isEmpty(date)) {
             throw new InvalidDateException("Date cannot be null or empty.");
         }
