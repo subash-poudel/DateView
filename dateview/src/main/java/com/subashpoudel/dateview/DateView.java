@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-public class DateView extends LinearLayout implements TextView.OnEditorActionListener {
+public class DateView extends LinearLayout implements TextView.OnEditorActionListener, View.OnKeyListener {
 
     public static final String DATE_SEPARATOR = "-";
     public static final int DATE_FORMAT_YMD = 0;
@@ -160,6 +160,7 @@ public class DateView extends LinearLayout implements TextView.OnEditorActionLis
         editTextYear.setTextColor(selectedColor);
         editTextYear.setOnEditorActionListener(this);
         editTextYear.setTextColor(selectedColor);
+        editTextYear.setOnKeyListener(this);
         nextEditTextArray.add(editTextYear);
     }
 
@@ -169,6 +170,7 @@ public class DateView extends LinearLayout implements TextView.OnEditorActionLis
         editTextDay.setTextColor(selectedColor);
         editTextDay.setOnEditorActionListener(this);
         editTextDay.setTextColor(selectedColor);
+        editTextDay.setOnKeyListener(this);
         nextEditTextArray.add(editTextDay);
     }
 
@@ -178,6 +180,7 @@ public class DateView extends LinearLayout implements TextView.OnEditorActionLis
         editTextMonth.setTextColor(selectedColor);
         editTextMonth.setOnEditorActionListener(this);
         editTextMonth.setTextColor(selectedColor);
+        editTextMonth.setOnKeyListener(this);
         nextEditTextArray.add(editTextMonth);
     }
 
@@ -270,6 +273,19 @@ public class DateView extends LinearLayout implements TextView.OnEditorActionLis
             }
         });
 
+    }
+
+    // for feature moving to previous edittext when current edittext is empty
+    @Override
+    public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
+        if(keyCode == KeyEvent.KEYCODE_DEL) {
+            EditText editText = (EditText) view;
+            int index = nextEditTextArray.indexOf(editText);
+            if(index > 0 && TextUtils.isEmpty(editText.getText())) {
+                nextEditTextArray.get(--index).requestFocus();
+            }
+        }
+        return false;
     }
 
     private void onDateEntered() {
@@ -419,7 +435,7 @@ public class DateView extends LinearLayout implements TextView.OnEditorActionLis
     }
 
     // Interface to notify view on date changes
-    interface DateEnteredListener {
+    public interface DateEnteredListener {
         void onDateEntered(Date date, boolean isValid);
     }
 

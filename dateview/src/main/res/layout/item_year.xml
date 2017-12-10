@@ -12,6 +12,7 @@
     <EditText
         android:id="@+id/et_year"
         style="@style/YearEditText"
+        android:inputType="numberDecimal"
         android:layout_below="@+id/tv_year"
         android:maxLength="4" />
 
