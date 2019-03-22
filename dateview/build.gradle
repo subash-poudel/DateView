@@ -2,7 +2,6 @@ apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion = 27
-    buildToolsVersion = "27.0.1"
 
     defaultConfig {
         minSdkVersion 15
@@ -29,4 +28,28 @@ dependencies {
 
     implementation 'com.android.support:appcompat-v7:27.0.2'
     testImplementation 'junit:junit:4.12'
+}
+
+ext {
+    bintrayRepo = 'maven'
+    bintrayName = 'DateView'
+
+    publishedGroupId = 'com.subashpoudel.dateview'
+    libraryName = 'DateView'
+    artifact = 'dateview'
+
+    libraryDescription = 'Alternative to android\'s date picker'
+
+    siteUrl = 'https://github.com/subash-poudel/DateView'
+    gitUrl = 'https://github.com/subash-poudel/DateView.git'
+
+    libraryVersion = '0.0.0'
+
+    developerId = 'blogsubash'
+    developerName = 'Subash Poudel'
+    developerEmail = 'blogsubash@gmail.com'
+
+    licenseName = 'The MIT License'
+    licenseUrl = 'https://opensource.org/licenses/MIT'
+    allLicenses = ['The MIT License']
 }
