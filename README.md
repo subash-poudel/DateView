@@ -4,3 +4,7 @@ This library is an alternative to the native date picker provided by android. Th
 ## Default date picker
 
 ![Default date picker](/images/date-picker-default.png)
+
+## Date View
+
+![Date View](/images/date-view.gif)
