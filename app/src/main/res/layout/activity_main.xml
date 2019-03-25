@@ -2,7 +2,10 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:background="#ffecb3"
+    >
 
     <TextView
         android:id="@+id/text"
@@ -12,16 +15,15 @@
 
     <com.subashpoudel.dateview.DateView
         android:id="@+id/dateView"
+        android:layout_below="@id/text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:background="@android:color/darker_gray"
         android:orientation="horizontal"
         app:sp_date_format="DMY"
         app:sp_enable_error_feedback="true"
         app:sp_error_color="@android:color/holo_red_dark"
         app:sp_maxDate="2100-01-01"
         app:sp_minDate="1900-01-01"
-        app:sp_normal_color="@android:color/holo_green_dark" />
+        app:sp_normal_color="@android:color/holo_orange_dark" />
 
 </RelativeLayout>
